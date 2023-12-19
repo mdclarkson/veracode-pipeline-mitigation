@@ -115,11 +115,10 @@ def get_matched_findings(appguid, mitigated_findings, pipeline_findings, sandbox
         # we allow for some movement of the line number in the pipeline scan findings relative to the mitigated finding as the code may
         # have changed. adjust LINE_NUMBER_SLOP for a more or less precise match, but don't broaden too far or you might match the wrong
         # finding.
-        match = next((pf for pf in pipeline_findings if ((thisf['cwe'] == int(pf['cwe_id'])) & 
-               (thisf['source_file'].find(pf['files']['source_file']['file']) > -1 ) & 
-               ((pf['files']['source_file']['line'] - LINE_NUMBER_SLOP) <= thisf['line'] <= (pf['files']['source_file']['line'] + LINE_NUMBER_SLOP)))), None)
 
-        if match != None:
+        if (match := next((pf for pf in pipeline_findings if ((thisf['cwe'] == int(pf['cwe_id'])) & 
+               (thisf['source_file'].find(pf['files']['source_file']['file']) > -1 ) & 
+               ((pf['files']['source_file']['line'] - LINE_NUMBER_SLOP) <= thisf['line'] <= (pf['files']['source_file']['line'] + LINE_NUMBER_SLOP)))), None)) != None:
             match['origin'] = { 'source_app': appguid, 'source_id': thisf['id'], 'resolution': thisf['resolution'],'comment': 'Migrated from mitigated policy or sandbox finding'}
             candidate_findings.append(match)
             log.debug('Matched pipeline finding {} to mitigated finding {}'.format(match['issue_id'],thisf['id']))
