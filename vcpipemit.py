@@ -13,7 +13,7 @@ LINE_NUMBER_SLOP = 3 #adjust to allow for line number movement
 
 log = logging.getLogger(__name__)
 
-ALLOWED_EXTENSIONS = set(['json'])
+ALLOWED_EXTENSIONS = {'json'}
 
 def setup_logger():
     handler = logging.FileHandler('vcpipmit.log', encoding='utf8')
